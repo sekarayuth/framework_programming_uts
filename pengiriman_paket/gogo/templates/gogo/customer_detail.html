@@ -1,0 +1,27 @@
+{% extends 'gogo/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card p-3">
+            <h3>{{ object.nama }}</h3>
+            <p>NIK: {{ object.nik }}<br>Alamat: {{ object.alamat }}</p>
+            <a href="{% url 'customer-list' %}" class="btn btn-outline-dark">Kembali</a>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card p-3">
+            <h4>Riwayat Paket Dikirim</h4>
+            <ul class="list-group">
+                {% for paket in object.paket_dikirim.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ paket.resi }} - Ke: {{ paket.penerima }}
+                    <span class="badge bg-primary">{{ paket.get_layanan_display }}</span>
+                </li>
+                {% empty %}
+                <li class="list-group-item">Belum pernah kirim paket.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
