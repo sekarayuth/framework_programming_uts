@@ -1,0 +1,79 @@
+{% extends 'gogo/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            
+            <div class="card card-custom p-4 mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="fw-bold text-primary mb-0">
+                        <i class="fas fa-box me-2"></i>{{ object.resi }}
+                    </h4>
+                    <span class="badge bg-warning text-dark">{{ object.get_layanan_display }}</span>
+                </div>
+                
+                <div class="row g-3">
+                    <div class="col-6">
+                        <small class="text-muted d-block">PENGIRIM</small>
+                        <span class="fw-bold">{{ object.pengirim.nama }}</span>
+                        <br><small>{{ object.pengirim.kota }}</small>
+                    </div>
+                    <div class="col-6 text-end">
+                        <small class="text-muted d-block">PENERIMA</small>
+                        <span class="fw-bold">{{ object.penerima }}</span>
+                        <br><small>{{ object.alamat_tujuan }}</small>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-top text-center">
+                    <a href="{% url 'tracking-add' %}?paket_id={{ object.pk }}" class="btn btn-primary rounded-pill fw-bold px-4 shadow-sm">
+                        <i class="fas fa-map-marker-alt me-2"></i> Update Lokasi Paket
+                    </a>
+                </div>
+            </div>
+
+            <h5 class="fw-bold text-secondary mb-3 ms-2">Riwayat Perjalanan</h5>
+            
+            <div class="card card-custom p-0 overflow-hidden">
+                {% if object.tracking.all %}
+                    <div class="list-group list-group-flush">
+                        {% for track in object.tracking.all|dictsortreversed:"waktu" %}
+                        <div class="list-group-item p-3 border-start border-4 {% if forloop.first %}border-primary bg-light{% else %}border-secondary{% endif %}">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{ track.get_status_display }}</h6>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fas fa-map-pin me-1"></i> {{ track.lokasi }}
+                                    </p>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted fw-bold" style="font-size: 0.75rem;">
+                                        {{ track.waktu|date:"d M Y" }}
+                                    </small>
+                                    <br>
+                                    <small class="text-muted" style="font-size: 0.7rem;">
+                                        {{ track.waktu|date:"H:i" }} WIB
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-4 text-center text-muted">
+                        <p>Belum ada update status.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="text-center mt-4 mb-5">
+                <a href="{% url 'paket-list' %}" class="text-decoration-none text-muted">
+                    &laquo; Kembali ke Daftar Paket
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
